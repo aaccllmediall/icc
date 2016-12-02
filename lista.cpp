@@ -68,7 +68,6 @@ struct node *elim(struct node *head)
 
 int main()
 {
-    int op;
     struct node *head;
     head=(struct node*)malloc(sizeof(struct node));
     crear(head);
