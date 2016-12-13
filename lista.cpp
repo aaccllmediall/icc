@@ -9,7 +9,7 @@ struct node
     struct node *next;
 };
 
-void crear(struct node *head)
+void crear(struct node *head, struct node *tail)
 {
     struct node *prev, *cur;
     cout << "Cuantos nodos desea:" << endl;
@@ -17,13 +17,16 @@ void crear(struct node *head)
     cin >> n;
     head->val=1;
     prev=head;
-    for (int i=2; i<=n; i++){
-        cur=(struct node*)malloc(sizeof(struct node));
-        cur->val=i;
-        prev->next=cur;
-        prev=cur;
+    if (n>1){
+		for (int i=2; i<=n; i++){
+    	    cur=(struct node*)malloc(sizeof(struct node));
+    	    cur->val=i;
+    	    prev->next=cur;
+    	    prev=cur;
+    	}
     }
-    prev->next=NULL;
+    tail=prev;
+    tail->next=NULL;
 };
 
 void impr(struct node *head)
@@ -37,7 +40,7 @@ void impr(struct node *head)
     }
 };
 
-struct node *elim(struct node *head)
+struct node *elim(struct node *head, struct node *tail)
 {
     cout << "Quitando nodo:" << endl << "Retire un termino existente:" << endl;
     int key;
@@ -48,6 +51,15 @@ struct node *elim(struct node *head)
         free(head);
         head=temp;
         return head;
+    }
+    else if (tail->val=key){
+		struct node *cur;
+		for (cur=head; cur->val<key-1; cur=cur->next)
+    		;
+    	free(tail);
+    	tail=cur;
+    	tail->next=NULL;
+    	return head;
     }
     else {
         struct node *prev, *cur;
@@ -68,11 +80,12 @@ struct node *elim(struct node *head)
 
 int main()
 {
-    struct node *head;
+    struct node *head, *tail;
     head=(struct node*)malloc(sizeof(struct node));
-    crear(head);
+    tail=(struct node*)malloc(sizeof(struct node));
+	crear(head, tail);
     impr(head);
-    head=elim(head);
+    head=elim(head, tail);
     impr(head);
     return 0;
 }
