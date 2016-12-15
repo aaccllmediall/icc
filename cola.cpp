@@ -150,6 +150,12 @@ int main()
                  vaciaCola( q );
                  cout<<"\n\n\t\tHecho...\n\n";
             break;
+          
+          
+            default:
+                 
+                 cout<<"\n\n\tEres un estúpido!!!\n\n"<<endl;
+            break;
            
          }
  
