@@ -2,84 +2,107 @@
 #include <windows.h>
 using namespace std;
 
-struct nodo{
+//              Prioridad de la Cola            //
+
+struct prioridad
+{
+    int prio;
+    struct cola *sacy;
+};
+
+
+/*                Estructura de los nodos de la cola
+------------------------------------------------------------------------*/
+struct nodo
+{
     int nro;
     struct nodo *sgte;
 };
 
-struct prioridad{
-    int prio;
-    nodo *pal;
+
+/*                      Estructura de la cola
+------------------------------------------------------------------------*/
+struct cola
+{
+    nodo *delante;
+    nodo *atras  ;
 };
 
-typedef prioridad *Prin;    // creando prioridad //
-typedef nodo *ptrPila;   // creando nodo tipo puntero( tipo de dato )
 
-/*                        Apilar elemento
+/*                        Encolar elemento
 ------------------------------------------------------------------------*/
-void push( ptrPila &p, int valor )
+void encolar( struct cola &q, int valor )
 {
-     ptrPila aux;
-     aux = new(struct nodo);  // apuntamos al nuevo nodo creado
-     aux->nro = valor;
+     struct nodo *aux = new(struct nodo);
 
-     aux->sgte = p ;
-     p = aux ;
+     aux->nro = valor;
+     aux->sgte = NULL;
+
+     if( q.delante == NULL)
+         q.delante = aux;   // encola el primero elemento
+     else
+         (q.atras)->sgte = aux;
+
+     q.atras = aux;        // puntero que siempre apunta al ultimo elemento
+
 }
 
-/*                Desapilar elemento(devuelve elemento)
+/*                        Desencolar elemento
 ------------------------------------------------------------------------*/
-int pop( ptrPila &p )
+int desencolar( struct cola &q )
 {
      int num ;
-     ptrPila aux;
+     struct nodo *aux ;
 
-     aux = p ;
-     num = aux->nro;   // asignamos el primer vamor de la pila
-
-     p = aux->sgte ;
-     delete(aux);
+     aux = q.delante;      // aux apunta al inicio de la cola
+     num = aux->nro;
+     q.delante = (q.delante)->sgte;
+     delete(aux);          // libera memoria a donde apuntaba aux
 
      return num;
 }
 
-/*                     Muestra elementos de la pila
+/*                        Mostrar Cola
 ------------------------------------------------------------------------*/
-void mostrar_pila( ptrPila p )
+void muestraCola( struct cola q )
 {
-     ptrPila aux;
-     aux = p;     // apunta al inicio de la lista
+     struct nodo *aux;
 
-     while( aux !=NULL )
+     aux = q.delante;
+
+     while( aux != NULL )
      {
-            cout<<"\t"<< aux->nro <<endl;
+            cout<<"   "<< aux->nro ;
             aux = aux->sgte;
      }
 }
 
-/*                Eliminar todos los elementos de la pila
+/*              Eliminar todos los elementos de la Cola
 ------------------------------------------------------------------------*/
-void destruir_pila( ptrPila &p)
+void vaciaCola( struct cola &q)
 {
-     ptrPila aux;
+     struct nodo *aux;
 
-     while( p != NULL)
+     while( q.delante != NULL)
      {
-           aux = p;
-           p = aux->sgte;
-           delete(aux);
+            aux = q.delante;
+            q.delante = aux->sgte;
+            delete(aux);
      }
+     q.delante = NULL;
+     q.atras   = NULL;
+
 }
 
 /*                        Menu de opciones
 ------------------------------------------------------------------------*/
 void menu()
 {
-    cout<<"CREANDO PILA DE PRIORIDAD, ¿QUÉ DESEA HACER?\n\n";
-    cout<<" 1. APILAR                                "<<endl;
-    cout<<" 2. DESAPILAR                             "<<endl;
-    cout<<" 3. MOSTRAR PILA                          "<<endl;
-    cout<<" 4. DESTRUIR PILA                         "<<endl;
+    cout<<"\n\t CREANDO COLA DE PRIORIDAD, ¿QUÉ DESEA HACER?\n\n";
+    cout<<" 1. ENCOLAR                               "<<endl;
+    cout<<" 2. DESENCOLAR                            "<<endl;
+    cout<<" 3. MOSTRAR COLA                          "<<endl;
+    cout<<" 4. VACIAR COLA                           "<<endl;
     cout<<" 5. SALIR                                 "<<endl;
 
     cout<<"\n INGRESE OPCION: ";
@@ -90,13 +113,19 @@ void menu()
 int main()
 {
     int f=1;
-    Prin g;
-    g->prio=f;   // mayor prioridad //
-    ptrPila p = NULL;
-    g->pal=p;  // creando pila
-    int dato;
-    int op;
-    int x ; // numero que devuelve la funcon pop
+    prioridad G;
+    G.prio=f;
+    struct cola *q;
+    G.sacy=q;
+
+
+    q->delante = NULL;
+    q->atras   = NULL;
+
+
+    int dato;  // numero a encolar
+    int op;    // opcion del menu
+    int x ;    // numero que devuelve la funcon pop
 
     system("color 0b");
 
@@ -108,33 +137,31 @@ int main()
         {
             case 1:
 
-                 cout<< "\n NUMERO A APILAR: "; cin>> dato;
-                 push( p, dato );
-                 cout<<"\n\n\t\tNumero " << dato << " apilado...\n\n";
+                 cout<< "\n NUMERO A ENCOLAR: "; cin>> dato;
+                 encolar( *q, dato );
+                 cout<<"\n\n\t\tNumero " << dato << " encolado...\n\n";
             break;
 
 
             case 2:
 
-                 x = pop( p );
-                 cout<<"\n\n\t\tNumero "<< x <<" desapilado...\n\n";
+                 x = desencolar( *q );
+                 cout<<"\n\n\t\tNumero "<< x <<" desencolado...\n\n";
             break;
 
 
             case 3:
 
-                 cout << "\n\n MOSTRANDO PILA\n\n";
-                 if(p!=NULL)
-                    mostrar_pila( p );
-                 else
-                    cout<<"\n\n\tPila vacia..!"<<endl;
+                 cout << "\n\n MOSTRANDO COLA\n\n";
+                 if(q->delante!=NULL) muestraCola( *q );
+                 else   cout<<"\n\n\tCola vacia...!"<<endl;
             break;
 
 
             case 4:
 
-                 destruir_pila( p );
-                 cout<<"\n\n\t\tPila eliminada...\n\n";
+                 vaciaCola( *q );
+                 cout<<"\n\n\t\tHecho...\n\n";
             break;
 
          }
