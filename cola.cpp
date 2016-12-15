@@ -90,7 +90,7 @@ void vaciaCola( struct cola &q)
 ------------------------------------------------------------------------*/
 void menu()
 {
-    cout<<"\n\t IMPLEMENTACION DE COLAS EN C++\n\n";
+    cout<<"\n\t CREANDO COLA, ¿QUÉ DESEA HACER?\n\n";
     cout<<" 1. ENCOLAR                               "<<endl;
     cout<<" 2. DESENCOLAR                            "<<endl;
     cout<<" 3. MOSTRAR COLA                          "<<endl;
