@@ -69,7 +69,7 @@ void destruir_pila( ptrPila &p)
 ------------------------------------------------------------------------*/
 void menu()
 {
-    cout<<"\n\t IMPLEMENTACION DE PILAS EN C++\n\n";
+    cout<<"\n\t CREANDO PILA, ¿QUÉ ESEA HACER?\n\n";
     cout<<" 1. APILAR                                "<<endl;
     cout<<" 2. DESAPILAR                             "<<endl;
     cout<<" 3. MOSTRAR PILA                          "<<endl;
